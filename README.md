@@ -23,3 +23,11 @@ The project will start on http://localhost:8000/home/
        firebase_token-: String
     </pre>
 
+2) /save_message/
+
+   <h4>method-: POST</h4>
+   <h4>body-: </h4>
+   <pre>
+       phone_number-: Integer,
+       message-:String
+    </pre>
