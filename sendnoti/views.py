@@ -3,7 +3,7 @@ from pyfcm import FCMNotification
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
-from .models import UserDetail
+from .models import UserDetail,Message
 from .serializers import UserdetailSerializer
 from rest_framework.response import Response
 push_service = FCMNotification(
