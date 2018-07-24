@@ -3,14 +3,18 @@ from pyfcm import FCMNotification
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
-from .models import UserDetail
-from .serializers import UserdetailSerializer
+from .models import UserDetail,Message
+from .serializers import UserdetailSerializer,MessageSerializer
 from rest_framework.response import Response
+
 push_service = FCMNotification(
     api_key="AAAA0ud_6ns:APA91bEHVPyl_lN9TDzZU-b3b1wewTpSPCvVXjjU2EAydj3Sptj8x2CoTXDbbqzBm5Kr-s0x7ISDzR97gtiWNkbcfghQpDZnnvOV-9CO7O383L3ZvBgLt23PndjZ_cFU--r0R64VWFsh")
 
 def home(request):
     return render(request,'index.html',{})
+
+def message(request):
+    return render(request,'message.html',{})
 
 class notify_user(APIView):
     def post(self,request,*args,**kwargs):
@@ -55,8 +59,13 @@ class save_message(APIView):
             user=UserDetail.objects.get(phone_number=phone)
             Message.objects.create(user=user,message=msg)
             return Response({"message":"Message is saved."},status=status.HTTP_201_CREATED)
-        except:
-            return Response({"message":"Phone number is wrong."},status=status.HTTP_400_BAD_REQUEST) 
+        except Exception as e:
+            return Response({"message":"Phone number is wrong.","error":e},status=status.HTTP_400_BAD_REQUEST) 
 
 
+class all_message(APIView):
+    def get(self,request):
+        message_all=Message.objects.all().order_by('-pk')
+        serializer = MessageSerializer(message_all,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
