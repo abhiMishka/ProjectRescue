@@ -4,7 +4,11 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
 from .models import UserDetail,Message
+<<<<<<< HEAD
 from .serializers import UserdetailSerializer,MessageSerializer
+=======
+from .serializers import UserdetailSerializer
+>>>>>>> ca9a1b6e0f5f18905a3313462c877e08ccafe1cd
 from rest_framework.response import Response
 
 push_service = FCMNotification(
@@ -57,7 +61,6 @@ class save_message(APIView):
         msg=request.data.get("message")
         try:
             user=UserDetail.objects.get(phone_number=phone)
-            print("hello")
             Message.objects.create(user=user,message=msg)
             return Response({"message":"Message is saved."},status=status.HTTP_201_CREATED)
         except Exception as e:
@@ -67,8 +70,6 @@ class save_message(APIView):
 class all_message(APIView):
     def get(self,request):
         message_all=Message.objects.all().order_by('-pk')
-        print('here')
         serializer = MessageSerializer(message_all,many=True)
-        print('lo lol o')
         return Response(serializer.data,status=status.HTTP_200_OK)
 

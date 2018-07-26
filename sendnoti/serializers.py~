@@ -11,4 +11,4 @@ class MessageSerializer(serializers.ModelSerializer):
     phone_number=serializers.ReadOnlyField(source='user.phone_number',read_only=True)
     class Meta(object):
         model = Message
-        fields = ('name','phone_number','message')
+        fields = ('name','phone_number','message','added')
