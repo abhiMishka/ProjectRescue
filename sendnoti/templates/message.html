@@ -60,7 +60,6 @@
 <script>
     var selected_user=[];
     function selectRow(id){
-    var selected_user=0;
     all_row=document.getElementsByClassName("table-info");
     console.log(all_row);
     selected_user=[]
@@ -70,10 +69,9 @@
     $('#'+id).toggleClass("table-info");
     if($('#'+id).hasClass("table-info"))
         selected_user.push(id);
-    console.log(selected_user);
 }
     function send(){
-    console.log(selected_user);
+    console.log("hellp",selected_user);
     $.post('http://127.0.0.1:8000/notify_user/',{"selected_user":selected_user,"notification_title":$('#noti-title').val   (),"notification_body":$('#noti-body').val()},function(data){
         $('#noti-title').val('');
         $('#noti-body').val('');
