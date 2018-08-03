@@ -29,8 +29,7 @@ INSTALLED_APPS = [
     'channels',
     'sendnoti',
     'rest_framework',
-    'corsheaders',
-    'socket_sendnoti'
+    'corsheaders'
 ]
 
 MIDDLEWARE = [

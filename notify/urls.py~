@@ -19,6 +19,5 @@ from django.conf.urls import url,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^',include('sendnoti.urls')),
-    url('^',include('socket_sendnoti.urls'))
+    url('^',include('sendnoti.urls'))
 ]

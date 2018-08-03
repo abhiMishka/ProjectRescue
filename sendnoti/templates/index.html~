@@ -86,7 +86,6 @@ $( document ).ready(function() {
     });
 });
 function send(){
-    console.log(selected_user);
     $.post('http://127.0.0.1:8000/notify_user/',{"selected_user":selected_user,"notification_title":$('#noti-title').val(),"notification_body":$('#noti-body').val()},function(data){
         $('#noti-title').val('');
         $('#noti-body').val('');
@@ -104,7 +103,6 @@ function selectRow(id){
 $('#exampleModal').on('show.bs.modal', function (e) {
    $.post('http://127.0.0.1:8000/show_detail/',{"id":e.relatedTarget.id},function(data){
         var detail=JSON.parse(data.details);
-        console.log(detail)
         var de="";
         for (var key in detail) {
             if (detail.hasOwnProperty(key)) {
