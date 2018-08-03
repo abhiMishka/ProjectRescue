@@ -79,7 +79,11 @@
 var selected_user=[];
 var socket_url="";
 $( document ).ready(function() {
-    socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/8853833881/");
+    socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/1/");
+    socket_url.onmessage = function(msg){
+        console.log("akdask " ,msg);
+      alert(msg);
+    }
     $.get('http://127.0.0.1:8000/show_all/',function(data){
         $.each(data,function(index,value){
             console.log(value,value.name);
@@ -97,10 +101,7 @@ function send(){
         }));
 }
 
-socket_url.onmessage = function(msg){
-        console.log("akdask " ,msg);
-      alert(msg);
-    }
+
 
 function selectRow(id){
     $('#'+id).toggleClass("table-info");
