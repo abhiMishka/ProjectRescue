@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Notification Menu</title>
+    <script src={% static 'jquery-3.1.1.min.js' %}></script>
+    <link rel="stylesheet" href={% static 'css/bootstrap.min.css' %} >
+    <script src={% static 'js/bootstrap.min.js' %}></script>
+    <script src={% static 'js/popper.min.js' %} integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ </head>
+<body style="padding:50px;background:url({% static 'back.png' %}); background-repeat:no-repeat;">
+<div class="container">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody id="table_data">
+          </tbody>
+        </table>
+       </div>
+           <button style="padding:-10px" type="button" class="btn btn-primary" data-toggle="modal" data-target="#sendnotify">Send notification</button> 
+
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal_detail">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="sendnotify" tabindex="-1" role="dialog" aria-labelledby="sendnotifyLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sendnotifyLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="noti-title" class="col-form-label">Notification Title</label>
+            <input type="text" class="form-control" id="noti-title">
+          </div>
+          <div class="form-group">
+            <label for="noti-body" class="col-form-label">Notification Body</label>
+            <textarea class="form-control" id="noti-body"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" onclick="send()" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var selected_user=[];
+var socket_url="";
+$( document ).ready(function() {
+    socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/8853833881/");
+    $.get('http://127.0.0.1:8000/show_all/',function(data){
+        $.each(data,function(index,value){
+            console.log(value,value.name);
+            $('#table_data').append('<tr id=' + value.phone_number + ' onclick=selectRow('+ value.phone_number + ') style="cursor:pointer;" ><th scope="row">'+index+ '</th><td>' + value.name + '</td><td>' + value.phone_number + '</td><td><button type="button"  id='+ value.id + ' class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Show Details</button></td></tr>');
+        });
+    });
+});
+
+function send(){
+    console.log(socket_url);
+    socket_url.send(JSON.stringify({
+          'phone_list':selected_user,
+          'message':$('#noti-body').val(),
+          'title':$('#noti-title').val(),
+        }));
+}
+
+socket_url.onmessage = function(msg){
+        console.log(msg);
+      alert(msg);
+    }
+
+function selectRow(id){
+    $('#'+id).toggleClass("table-info");
+    if($('#'+id).hasClass("table-info"))
+        selected_user.push(id);
+    else
+        selected_user.splice(selected_user.indexOf(id),1);
+}
+$('#exampleModal').on('show.bs.modal', function (e) {
+   $.post('http://127.0.0.1:8000/show_detail/',{"id":e.relatedTarget.id},function(data){
+        var detail=JSON.parse(data.details);
+        console.log(detail)
+        var de="";
+        for (var key in detail) {
+            if (detail.hasOwnProperty(key)) {
+             de+=key + " -> " + detail[key]+"<br>";
+           }
+        }
+        $('#modal_detail').html("<pre>"+de+"</pre>");
+   });
+});
+</script>
+</body>
+</html>
