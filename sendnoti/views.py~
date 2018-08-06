@@ -4,11 +4,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
 from .models import UserDetail,Message
-<<<<<<< HEAD
 from .serializers import UserdetailSerializer,MessageSerializer
-=======
-from .serializers import UserdetailSerializer
->>>>>>> ca9a1b6e0f5f18905a3313462c877e08ccafe1cd
 from rest_framework.response import Response
 
 push_service = FCMNotification(

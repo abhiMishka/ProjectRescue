@@ -27,6 +27,7 @@ class notify_user(APIView):
             user=UserDetail.objects.get(id=users)
             if user.firebase_token != None:
                 dev_ids.append(user.firebase_token)
+            print(dev_ids)
         results = push_service.notify_multiple_devices(registration_ids=dev_ids, message_title=message_title,message_body=message_body)
         return JsonResponse({"message": "Task Completed."}, status=status.HTTP_200_OK)
 

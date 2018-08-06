@@ -59,7 +59,9 @@
 </div>
 <script>
     var selected_user=[];
-    function selectRow(id){
+    var socket_url="";
+    
+    function selectRow(id,number){
     all_row=document.getElementsByClassName("table-info");
     console.log(all_row);
     selected_user=[]
@@ -69,20 +71,32 @@
     $('#'+id).toggleClass("table-info");
     if($('#'+id).hasClass("table-info"))
         selected_user.push(id);
-}
+        selected_user.push(number);
+    }
+    
     function send(){
-    console.log("hellp",selected_user);
-    $.post('http://127.0.0.1:8000/notify_user/',{"selected_user":selected_user,"notification_title":$('#noti-title').val   (),"notification_body":$('#noti-body').val()},function(data){
-        $('#noti-title').val('');
-        $('#noti-body').val('');
-        $('#sendnotify').modal('hide');
-        alert("Notification Send");
-    });
-}   
+    var arr=[];
+    arr.push(selected_user[1]);
+    console.log(arr);
+    socket_url.send(JSON.stringify({
+          'phone_list':arr,
+          'message':$('#noti-body').val(),
+          'title':$('#noti-title').val(),
+        }));
+    $('#noti-title').val('');
+    $('#noti-body').val('');
+    $('#sendnotify').modal('hide');
+    alert("Notification Send");    
+    }
+       
     $( document ).ready(function() {
+    socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/1/");
+    socket_url.onmessage = function(msg){
+      alert("Notification Send -:",msg.title);
+    }
     $.get('http://127.0.0.1:8000/all_message/',function(data){
         $.each(data,function(index,value){
-            $('#table_data').append('<tr id=' + value.id + ' onclick=selectRow('+ value.id + ') style="cursor:pointer;"><th scope="row">'+index+ '</th><td>' + value.name + '</td><td>' + value.phone_number + '</td><td>' + value.message + '</td><td>' + value.added + '</td></tr>');
+            $('#table_data').append('<tr id=' + value.id + ' onclick=selectRow('+ value.id + ',' + value.phone_number + ') style="cursor:pointer;"><th scope="row">'+index+ '</th><td>' + value.name + '</td><td>' + value.phone_number + '</td><td>' + value.message + '</td><td>' + value.added + '</td></tr>');
         });
     });
 });
