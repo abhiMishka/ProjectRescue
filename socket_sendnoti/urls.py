@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     url('^offline/home/$',views.home,name='home'),
     url('^offline/message/$',views.message,name='message'),
+    url('^map/$',views.offlinemap,name='offlinemap'),
 ]

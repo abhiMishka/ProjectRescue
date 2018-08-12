@@ -14,7 +14,7 @@ SECRET_KEY = '*ecltig5k95y(uh(@nzd5_+-uqmpi&6t-o#rb&uv#5%*2wx=u0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -131,3 +131,9 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+STATIC_ROOT =os.path.join(BASE_DIR, "static")
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "static"),
+
+#]

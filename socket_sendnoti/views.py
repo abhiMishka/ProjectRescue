@@ -6,3 +6,5 @@ def home(request):
 def message(request):
     return render(request,'message2.html',{})
 
+def offlinemap(request):
+    return render(request,'map.html',{})    
