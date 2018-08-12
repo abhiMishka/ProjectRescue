@@ -7,6 +7,11 @@ pip3 install django-rest-framework
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py runserver 
+pip3 install channels_redis
+docker run -p 6379:6379 -d redis:2.8
+
+socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/phone_number/");
+
 </pre>
 The project will start on http://localhost:8000/home/
 

@@ -65,6 +65,8 @@
     all_row=document.getElementsByClassName("table-info");
     console.log(all_row);
     selected_user=[]
+    var socket_url="";
+    
     for (let i in all_row) {  
         $('#'+((all_row[i]).id)).toggleClass("table-info");
     }
@@ -74,7 +76,8 @@
         selected_user.push(number);
     }
     
-    function send(){
+ 
+function send(){
     var arr=[];
     arr.push(selected_user[1]);
     console.log(arr);
@@ -89,8 +92,9 @@
     alert("Notification Send");    
     }
        
+    
     $( document ).ready(function() {
-    socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/1/");
+    socket_url=new WebSocket("ws://127.0.0.1:8000/ws/notify/2/");
     socket_url.onmessage = function(msg){
       alert("Notification Send -:",msg.title);
     }
